@@ -32,7 +32,7 @@
         "10":[300,-325],
         "11":[100,-325]
     },
-    "stimulationLength":[2],
+    "stimulationLength":[0.4],
     "stimuliLoop":[1],   
     "cuelen":[1.0],
     "framerate":[60.0],

@@ -248,7 +248,6 @@ class algorithmthread(Thread):
             print('Did not get a result, current result buffer: {}'.format(self.resultCount))
             pass
         '''
-        char = ['a','b','c','d','e','f','g','h','i','j','k','l']
         decide = np.sum(self.resultCount,axis=1,keepdims=False)
         maxCoefs = np.array(heapq.nlargest(2,decide))              # 找出decide的最大和次大相关系数
         self.ldaX[0,1:] = maxCoefs
@@ -258,7 +257,7 @@ class algorithmthread(Thread):
             self.sendresult = np.argmax(decide)                    # 最大相关系数的索引
             #self.sendCommand(self.sendresult)
             # print('Epoch result: {}'.format(self.settingsfile[str(self.sendresult)]))
-            self.sendCommand(char[self.sendresult])
+            self.sendCommand(self.sendresult)
             print('send result!')
             # self.sendCommand(command)
         else:

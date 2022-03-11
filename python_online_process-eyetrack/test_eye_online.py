@@ -1,4 +1,3 @@
-from socket import send_fds
 import numpy as np
 import scipy.io as scio
 from scipy.signal import resample
@@ -65,7 +64,7 @@ def gaze_data_callback1(gaze_data):
     send_flag.value = 0
     if time_delay >= 400:
         send_flag.value = 1 
-        print('time_delay：{}，suitpoint:{}，gaze_data:{}'.format(time_delay,SuitPoint,gaze_right_left_eyes))
+        print('time_delay：{}，suitpoint:{}，gaze_data:{},send_flag{}'.format(time_delay,SuitPoint,gaze_right_left_eyes,send_flag.value))
         SuitPoint = 0
         if max(gaze_points[0]) > 18:
             eyetrack_flag.value = np.argmax(gaze_points[0])+1

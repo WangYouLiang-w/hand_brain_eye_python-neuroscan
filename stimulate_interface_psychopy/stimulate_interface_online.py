@@ -18,8 +18,8 @@ class StimulateProcess():
 
     def __init__(self):
         #===========================设置标签接口======================#
-        # port = parallel.ParallelPort(address=0xdefc)# 端口地址 107=0xdefc，205=52988
-        # port.setData(0)#标签置0
+        self.port = parallel.ParallelPort(address=0xdefc)# 端口地址 107=0xdefc，205=52988
+        self.port.setData(0)#标签置0
         
 
         # 建立服务端(刺激界面的接收端)
@@ -46,7 +46,7 @@ class StimulateProcess():
         self.textList = settings[u'controlCommand']                   # 字符列表
         self.textposition = settings[u'textposition']                 # 字符位置
         self.position = settings[u'position']                         # 刺激块的位置 
-        self.framerate = settings[u'framerate'][0]                    # 屏幕刷新频率
+        self.framerate = 120                                          # 屏幕刷新频率
         self.cueseries =settings[u'cueSeries']                        # 
         self.stimulus_blocks = len(self.position)                 # 刺激块的个数
         
@@ -136,11 +136,11 @@ class StimulateProcess():
                 for rect_stim in self.stim_Rects:                        
                     tic = time.time() 
                     # 打标签
-                    # if StimulusCount == 1:
-                    #     self.port.setData(trial)
+                    if StimulusCount == 1:
+                        self.port.setData(int(trial))
 
-                    # if StimulusCount == 3:
-                    #     self.port.setData(0)
+                    if StimulusCount == 3:
+                        self.port.setData(0)
                     StimulusCount = StimulusCount + 1
                     
                     #%% 刺激界面接收到的反馈
@@ -153,6 +153,7 @@ class StimulateProcess():
                     
                     if brain_data:
                         brain_decide_result = int(str(brain_data,encoding='utf8'))
+                        print(brain_decide_result)
                         self.brain_feedback[brain_decide_result-1].draw()          
                         
                     # 刺激块    
@@ -176,7 +177,7 @@ class StimulateProcess():
                     toc = time.time()
                     T = toc-tic
                     self.res_time.append(T)
-                    print(T)
+                    #print(T)
                     # 任意键退出
                     if event.getKeys():
                         print('average time{}'.format(np.average(self.res_time)))

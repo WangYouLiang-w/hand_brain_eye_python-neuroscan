@@ -18,8 +18,8 @@ class StimulateProcess():
 
     def __init__(self):
         #===========================设置标签接口======================#
-        port = parallel.ParallelPort(address=0xdefc)# 端口地址 107=0xdefc，205=52988
-        port.setData(0)#标签置0
+        self.port = parallel.ParallelPort(address=0xdefc)# 端口地址 107=0xdefc，205=52988
+        self.port.setData(0)#标签置0
 
         presettingfile = open('PreSettings_Single_tenclass.json')
         settings = json.load(presettingfile)
@@ -30,7 +30,7 @@ class StimulateProcess():
         self.textList = settings[u'controlCommand']                   # 字符列表
         self.textposition = settings[u'textposition']                 # 字符位置
         self.position = settings[u'position']                         # 刺激块的位置 
-        self.framerate = settings[u'framerate'][0]                    # 屏幕刷新频率
+        self.framerate = 120                                           # 屏幕刷新频率
         self.cueseries =settings[u'cueSeries']                        # 
         self.stimulus_blocks = len(self.position)                 # 刺激块的个数
         
