@@ -34,6 +34,9 @@ print("Name(It's OK if this is empty):" + my_eyetraker.device_name)
 print("Serial number:" + my_eyetraker.serial_number)
 
 
+
+
+#%% 眼动数据的回调函数
 def gaze_data_callback1(gaze_data):
     global SuitPoint
     global gaze_points
@@ -61,36 +64,42 @@ def gaze_data_callback1(gaze_data):
     time1 = gaze_data["system_time_stamp"]
     time_delay = (time1 - sys_time_stamp_init)/1000
     
-    send_flag.value = 0
+    
     if time_delay >= 400:
         send_flag.value = 1 
         print('time_delay：{}，suitpoint:{}，gaze_data:{},send_flag{}'.format(time_delay,SuitPoint,gaze_right_left_eyes,send_flag.value))
-        SuitPoint = 0
+        SuitPoint = 0 
         if max(gaze_points[0]) > 18:
             eyetrack_flag.value = np.argmax(gaze_points[0])+1
             gaze_points[0] = 0
         else:
             eyetrack_flag.value = 0 
-   
+    
 
-
+#%% 主程序
 if __name__ == '__main__':
     # 子线程和主线程共享的资源
     eyetrack_flag = Manager().Value('d',0)   
-    send_flag = Manager().Value('d',0) 
-
-    flagstop = False
-    hostname = '127.0.0.1'        
-    port = 8712                       # 端口号
-    datalocker = Event()             
-    
-    # 数据处理的线程  mj
+    # send_flag = Manager().list([0]) 
+    send_flag = Manager().Value('d',0)
+      
+    #%% 数据发送的线程  mj
     dataRunner = algorithmthread(eyetrack_flag,send_flag)  
-    dataRunner.Daemon = True
+    dataRunner.daemon = True
     dataRunner.start()
 
-    # 主线程
+    #%% 主线程
     # 现在我们只需要告诉SDK当有新的凝视数据时应该调用这个函数。告诉眼动仪开始追踪!
     my_eyetraker.subscribe_to(EyeTracker.EYETRACKER_GAZE_DATA, gaze_data_callback1, as_dictionary=True)
     time.sleep(1200)
     my_eyetraker.unsubscribe_from(EyeTracker.EYETRACKER_GAZE_DATA, gaze_data_callback1)
+
+
+
+#%% # 存在的问题 眼动数据无效时 导致时间差不稳定？ 或许可以使用时间同步数据可以解决
+
+
+
+
+
+

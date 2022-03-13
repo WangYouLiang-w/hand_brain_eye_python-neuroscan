@@ -5,11 +5,6 @@ import scipy.io as scio
 from scipy import trapz
 from threading import Thread
 import socket
-import time
-import heapq
-from mne.time_frequency import psd_array_welch
-#from numba import jit
-
 
 
 class algorithmthread(Thread):
@@ -30,7 +25,7 @@ class algorithmthread(Thread):
                 eye_decide_result = self.eye_track_result.value
                 print("eye_decide_result:{}".format(eye_decide_result))
                 self.sendCommand(eye_decide_result) 
-                self.eye_send_flag.value = 0
+                self.eye_send_flag.value  = 0
                
                 
     def sendCommand(self,command):
